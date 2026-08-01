@@ -1,0 +1,6 @@
+.student-announcements .card {
+    transition: transform 0.2s;
+}
+.student-announcements .card:hover {
+    transform: translateY(-5px);
+}
