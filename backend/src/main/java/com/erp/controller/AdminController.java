@@ -10,6 +10,8 @@ import com.erp.model.Teacher;
 import com.erp.service.StudentService;
 import com.erp.service.TeacherService;
 import com.erp.service.CourseService;
+import com.erp.service.SubjectService;
+import com.erp.model.Subject;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -27,6 +29,7 @@ public class AdminController {
     private final StudentService studentService;
     private final TeacherService teacherService;
     private final CourseService courseService;
+    private final SubjectService subjectService;
     
     // Student Management
     @PostMapping("/students")
@@ -117,5 +120,36 @@ public class AdminController {
         
         return ResponseEntity.ok(ApiResponse.success("Stats retrieved successfully", 
             Map.of("students", studentCount, "teachers", teacherCount, "courses", courseCount)));
+    }
+    
+    // Subject Management
+    @PostMapping("/subjects")
+    public ResponseEntity<?> createSubject(@Valid @RequestBody com.erp.dto.request.SubjectRequest request) {
+        Subject subject = subjectService.createSubject(request);
+        return ResponseEntity.ok(ApiResponse.success("Subject created successfully", subject));
+    }
+    
+    @PutMapping("/subjects/{id}")
+    public ResponseEntity<?> updateSubject(@PathVariable Long id, @Valid @RequestBody com.erp.dto.request.SubjectRequest request) {
+        Subject subject = subjectService.updateSubject(id, request);
+        return ResponseEntity.ok(ApiResponse.success("Subject updated successfully", subject));
+    }
+    
+    @DeleteMapping("/subjects/{id}")
+    public ResponseEntity<?> deleteSubject(@PathVariable Long id) {
+        subjectService.deleteSubject(id);
+        return ResponseEntity.ok(ApiResponse.success("Subject deleted successfully", null));
+    }
+    
+    @GetMapping("/subjects")
+    public ResponseEntity<?> getAllSubjects() {
+        List<Subject> subjects = subjectService.getAllSubjects();
+        return ResponseEntity.ok(ApiResponse.success("Subjects retrieved successfully", subjects));
+    }
+    
+    @GetMapping("/subjects/course/{courseId}")
+    public ResponseEntity<?> getSubjectsByCourse(@PathVariable Long courseId) {
+        List<Subject> subjects = subjectService.getSubjectsByCourse(courseId);
+        return ResponseEntity.ok(ApiResponse.success("Subjects retrieved successfully", subjects));
     }
 }

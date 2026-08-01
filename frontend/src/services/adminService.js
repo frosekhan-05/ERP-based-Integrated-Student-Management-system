@@ -91,9 +91,39 @@ const adminService = {
         return response.data;
     },
     
+    updateSubject: async (id, subjectData) => {
+        const response = await api.put(`/admin/subjects/${id}`, subjectData);
+        return response.data;
+    },
+    
+    deleteSubject: async (id) => {
+        const response = await api.delete(`/admin/subjects/${id}`);
+        return response.data;
+    },
+    
+    getSubjectsByCourse: async (courseId) => {
+        const response = await api.get(`/admin/subjects/course/${courseId}`);
+        return response.data.data;
+    },
+    
     // Timetable Management
+    getTimetable: async () => {
+        const response = await api.get('/timetable');
+        return response.data.data;
+    },
+    
     createTimetable: async (timetableData) => {
         const response = await api.post('/timetable', timetableData);
+        return response.data;
+    },
+    
+    updateTimetable: async (id, timetableData) => {
+        const response = await api.put(`/timetable/${id}`, timetableData);
+        return response.data;
+    },
+    
+    deleteTimetable: async (id) => {
+        const response = await api.delete(`/timetable/${id}`);
         return response.data;
     },
     
