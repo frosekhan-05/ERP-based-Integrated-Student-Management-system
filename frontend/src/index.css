@@ -1,0 +1,11 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@import "./theme/tokens.css";
+
+body {
+  background-color: var(--color-background);
+  color: var(--color-text-main);
+  @apply antialiased;
+}
