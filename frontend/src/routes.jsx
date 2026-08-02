@@ -5,7 +5,15 @@ import { TeacherLayout } from './layouts/TeacherLayout';
 import { StudentLayout } from './layouts/StudentLayout';
 import { EmptyState } from './components/ui/EmptyState';
 import { Button } from './components/ui/Button';
-
+import { Login } from './features/auth/Login';
+import { Register } from './features/auth/Register';
+import { AdminDashboard } from './features/dashboard/AdminDashboard';
+import { AdminStudents } from './features/admin/AdminStudents';
+import { StudentDashboard } from './features/dashboard/StudentDashboard';
+import { StudentAttendance } from './features/attendance/StudentAttendance';
+import { StudentTimetable } from './features/timetable/StudentTimetable';
+import { StudentMarks } from './features/marks/StudentMarks';
+import { StudentFees } from './features/fees/StudentFees';
 // Temporary placeholder components for routes until we build the features
 const Placeholder = ({ title }) => (
   <div className="p-6">
@@ -23,19 +31,25 @@ export const router = createBrowserRouter([
     element: <Navigate to="/login" replace />,
   },
   {
-    path: '/',
+    path: '/login',
     element: <AuthLayout />,
     children: [
-      { path: 'login', element: <Placeholder title="Login" /> },
-      { path: 'register', element: <Placeholder title="Register" /> },
+      { index: true, element: <Login /> },
+    ],
+  },
+  {
+    path: '/register',
+    element: <AuthLayout />,
+    children: [
+      { index: true, element: <Register /> },
     ],
   },
   {
     path: '/admin',
     element: <AdminLayout />,
     children: [
-      { path: 'dashboard', element: <Placeholder title="Admin Dashboard" /> },
-      { path: 'students', element: <Placeholder title="Manage Students" /> },
+      { path: 'dashboard', element: <AdminDashboard /> },
+      { path: 'students', element: <AdminStudents /> },
       { path: 'teachers', element: <Placeholder title="Manage Teachers" /> },
       { path: 'courses', element: <Placeholder title="Manage Courses" /> },
       { path: 'settings', element: <Placeholder title="Settings" /> },
@@ -55,18 +69,19 @@ export const router = createBrowserRouter([
     path: '/student',
     element: <StudentLayout />,
     children: [
-      { path: 'dashboard', element: <Placeholder title="Student Dashboard" /> },
-      { path: 'attendance', element: <Placeholder title="My Attendance" /> },
-      { path: 'timetable', element: <Placeholder title="My Timetable" /> },
-      { path: 'marks', element: <Placeholder title="My Marks" /> },
-      { path: 'fees', element: <Placeholder title="Fee Payment" /> },
+      { path: 'dashboard', element: <StudentDashboard /> },
+      { path: 'attendance', element: <StudentAttendance /> },
+      { path: 'timetable', element: <StudentTimetable /> },
+      { path: 'marks', element: <StudentMarks /> },
+      { path: 'fees', element: <StudentFees /> },
     ],
   },
   {
     path: '*',
     element: (
       <div className="flex h-screen items-center justify-center">
-        <EmptyState title="404 - Not Found" description="The page you are looking for does not exist." action={<Button onClick={() => window.history.back()}>Go Back</Button>} />
+        {console.log("404 ROUTE HIT. Current pathname:", window.location.pathname)}
+        <EmptyState title="404 - Not Found" description={`The page you are looking for does not exist. (Path: ${window.location.pathname})`} action={<Button onClick={() => window.location.href = '/'}>Go Home</Button>} />
       </div>
     ),
   }

@@ -15,7 +15,18 @@ export const AuthProvider = ({ children }) => {
     // Check for stored token and fetch user info
     const storedUser = localStorage.getItem('user');
     if (storedUser) {
-      setUser(JSON.parse(storedUser));
+      try {
+        const parsedUser = JSON.parse(storedUser);
+        const validRoles = ['ADMIN', 'TEACHER', 'STUDENT'];
+        if (parsedUser && parsedUser.role && validRoles.includes(parsedUser.role.toUpperCase())) {
+          setUser(parsedUser);
+        } else {
+          localStorage.removeItem('user');
+          localStorage.removeItem('token');
+        }
+      } catch (e) {
+        localStorage.removeItem('user');
+      }
     }
     setIsLoading(false);
   }, []);

@@ -3,7 +3,7 @@ import { jwtDecode } from 'jwt-decode';
 
 export const login = async (username, password) => {
     const response = await api.post('/auth/login', { username, password });
-    return response.data;
+    return response.data.data; // Unpack the Spring Boot ApiResponse envelope
 };
 
 export const logout = async () => {

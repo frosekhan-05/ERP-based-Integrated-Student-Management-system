@@ -10,8 +10,9 @@ export const AuthLayout = () => {
   if (isLoading) return null;
   
   // If already logged in, redirect based on role
-  if (user) {
-    return <Navigate to={`/${user.role}/dashboard`} replace />;
+  if (user && user.role) {
+    const rolePath = user.role.toLowerCase();
+    return <Navigate to={`/${rolePath}/dashboard`} replace />;
   }
 
   return (

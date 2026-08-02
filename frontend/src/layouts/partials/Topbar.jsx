@@ -1,7 +1,7 @@
 import { Bell, User } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useState } from 'react';
-import { useAuth } from '../../../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 
 export const Topbar = () => {
   const { user } = useAuth();

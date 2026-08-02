@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useLocation } from 'react-router-dom';
 import { ChevronLeft, ChevronRight, LayoutDashboard, Users, BookOpen, Settings, LogOut } from 'lucide-react';
-import { useAuth } from '../../../hooks/useAuth';
+import { useAuth } from '../../hooks/useAuth';
 
 export const Sidebar = ({ links = [] }) => {
   const [isCollapsed, setIsCollapsed] = useState(false);

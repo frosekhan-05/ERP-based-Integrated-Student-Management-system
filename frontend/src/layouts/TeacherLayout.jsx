@@ -17,7 +17,7 @@ export const TeacherLayout = () => {
 
   if (isLoading) return null;
   
-  if (!user || user.role !== 'teacher') {
+  if (!user || user.role?.toUpperCase() !== 'TEACHER') {
     return <Navigate to="/login" replace />;
   }
 

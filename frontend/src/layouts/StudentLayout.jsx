@@ -18,7 +18,7 @@ export const StudentLayout = () => {
 
   if (isLoading) return null;
   
-  if (!user || user.role !== 'student') {
+  if (!user || user.role?.toUpperCase() !== 'STUDENT') {
     return <Navigate to="/login" replace />;
   }
 

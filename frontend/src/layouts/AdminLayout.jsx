@@ -18,7 +18,7 @@ export const AdminLayout = () => {
 
   if (isLoading) return null; // Or a full screen skeleton
   
-  if (!user || user.role !== 'admin') {
+  if (!user || user.role?.toUpperCase() !== 'ADMIN') {
     return <Navigate to="/login" replace />;
   }
 
