@@ -1,0 +1,83 @@
+.register-card {
+  overflow: hidden;
+  background: rgba(30, 41, 59, 0.94);
+  border: 1px solid rgba(148, 163, 184, 0.38);
+  color: #ffffff;
+}
+
+.register-card::before {
+  content: "";
+  display: block;
+  height: 8px;
+  background: linear-gradient(90deg, var(--brand), var(--accent), var(--mint));
+}
+
+.register-card h3 {
+  margin-bottom: 0.45rem;
+  font-size: 2rem;
+  color: #ffffff;
+}
+
+.register-card .text-center.mb-4 {
+  margin-bottom: 1.75rem !important;
+}
+
+.register-card .btn-primary {
+  margin-top: 0.75rem;
+}
+
+.register-card .text-decoration-none {
+  font-weight: 700;
+  color: var(--accent) !important;
+}
+
+.register-subtitle {
+  color: rgba(226, 232, 240, 0.74) !important;
+}
+
+.register-card .form-label {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.register-card .form-control,
+.register-card .form-select {
+  min-height: 48px;
+  background: rgba(2, 6, 23, 0.72);
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  color: #ffffff;
+}
+
+.register-card .form-control::placeholder {
+  color: rgba(148, 163, 184, 0.86);
+}
+
+.register-card .input-group-text {
+  background: rgba(255, 255, 255, 0.92);
+  color: #0f172a;
+}
+
+.register-card .phone-icon {
+  transform: scaleX(-1);
+}
+
+.register-card .password-eye-btn {
+  border: 1px solid rgba(148, 163, 184, 0.45);
+  border-left: 0;
+  border-radius: 0 18px 18px 0;
+  background: rgba(2, 6, 23, 0.72);
+  color: rgba(226, 232, 240, 0.86);
+  min-width: 52px;
+}
+
+.register-card .password-eye-btn:hover,
+.register-card .password-eye-btn:focus {
+  background: rgba(56, 189, 248, 0.12);
+  color: var(--accent);
+  box-shadow: none;
+}
+
+.register-card .text-center p,
+.register-card .text-center p a {
+  color: #ffffff;
+}

@@ -1,0 +1,29 @@
+.not-found-page {
+  min-height: 100vh;
+}
+
+.not-found-page .container {
+  padding-top: 4rem;
+  padding-bottom: 4rem;
+}
+
+.not-found-page .justify-content-center > div {
+  padding: 2.4rem;
+  border: 1px solid rgba(255, 255, 255, 0.52);
+  border-radius: 32px;
+  background: rgba(255, 255, 255, 0.8);
+  backdrop-filter: blur(20px);
+  box-shadow: var(--shadow-lg);
+}
+
+.not-found-icon {
+  margin-bottom: 1rem;
+  font-size: 3rem;
+  color: var(--accent-strong);
+}
+
+.not-found-page .display-1 {
+  margin-bottom: 0.5rem;
+  font-family: "Space Grotesk", sans-serif;
+  font-weight: 700;
+}

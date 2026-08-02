@@ -1,0 +1,17 @@
+package com.erp;
+
+import org.springframework.context.ConfigurableApplicationContext;
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+
+@SpringBootApplication
+public class BackendApplication {
+    public static void main(String[] args) {
+        ConfigurableApplicationContext context = SpringApplication.run(BackendApplication.class, args);
+        String port = context.getEnvironment().getProperty("server.port", "8080");
+        System.out.println("==========================================");
+        System.out.println("ERP Student Management System Started!");
+        System.out.println("Access at: http://localhost:" + port + "/api");
+        System.out.println("==========================================");
+    }
+}

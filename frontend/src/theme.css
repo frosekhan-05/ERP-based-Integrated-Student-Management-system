@@ -1,0 +1,757 @@
+/* Final theme layer loaded after component styles. */
+
+.App::before {
+  background-image:
+    linear-gradient(rgba(56, 189, 248, 0.04) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(148, 163, 184, 0.04) 1px, transparent 1px);
+  opacity: 0.18;
+}
+
+.Toastify__toast {
+  border: 1px solid var(--border-soft);
+  border-radius: 18px;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(30, 41, 59, 0.92));
+  color: var(--text-main);
+  box-shadow: var(--shadow-soft);
+}
+
+.Toastify__progress-bar {
+  background: linear-gradient(90deg, var(--brand), var(--accent-strong));
+}
+
+.header {
+  border: 1px solid var(--border-soft);
+  background:
+    linear-gradient(135deg, rgba(2, 6, 23, 0.96) 0%, rgba(15, 23, 42, 0.94) 52%, rgba(30, 41, 59, 0.88) 100%);
+  box-shadow: var(--shadow-soft);
+}
+
+.brand-mark,
+.footer-mark,
+.user-avatar {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.96), rgba(15, 23, 42, 0.98));
+  color: #020617;
+  box-shadow: 0 18px 34px rgba(56, 189, 248, 0.22);
+}
+
+.brand-copy small,
+.footer-brand p,
+.footer-meta {
+  color: rgba(226, 232, 240, 0.7);
+}
+
+.header .nav-link:hover,
+.header .nav-link:focus {
+  background: rgba(56, 189, 248, 0.12);
+}
+
+.header .dropdown-menu {
+  background: rgba(15, 23, 42, 0.96);
+  border-color: var(--border-soft);
+}
+
+.header .dropdown-item:hover {
+  background: rgba(56, 189, 248, 0.12);
+}
+
+.user-info {
+  background: rgba(15, 23, 42, 0.72);
+  border-color: var(--border-soft);
+}
+
+.notification-badge {
+  border-color: rgba(2, 6, 23, 0.92);
+}
+
+.footer .container-lg {
+  border-color: var(--border-soft);
+  background:
+    linear-gradient(135deg, rgba(2, 6, 23, 0.98) 0%, rgba(15, 23, 42, 0.94) 48%, rgba(30, 41, 59, 0.9) 100%);
+  color: var(--text-main);
+  box-shadow: var(--shadow-soft);
+}
+
+.footer-tag,
+.social-link {
+  background: rgba(15, 23, 42, 0.72);
+  border-color: var(--border-soft);
+}
+
+.social-link:hover {
+  background: rgba(56, 189, 248, 0.12);
+}
+
+.home-page {
+  color: var(--text-main);
+}
+
+.home-page::before {
+  background: rgba(56, 189, 248, 0.16);
+}
+
+.home-page::after {
+  background: rgba(30, 41, 59, 0.56);
+}
+
+.hero-section .container,
+.features-section .container,
+.workflow-section .container {
+  border: 1px solid var(--border-soft);
+  box-shadow: var(--shadow-lg);
+}
+
+.hero-section .container,
+.features-section .container {
+  background:
+    radial-gradient(circle at 78% 16%, rgba(56, 189, 248, 0.12), transparent 22%),
+    linear-gradient(140deg, rgba(2, 6, 23, 0.96) 0%, rgba(15, 23, 42, 0.94) 52%, rgba(30, 41, 59, 0.9) 100%);
+}
+
+.workflow-section .container {
+  background:
+    linear-gradient(145deg, rgba(15, 23, 42, 0.96) 0%, rgba(30, 41, 59, 0.94) 100%);
+}
+
+.hero-section .container::before,
+.hero-section .container::after {
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.18), transparent 70%);
+}
+
+.hero-kicker,
+.section-kicker,
+.login-kicker,
+.login-eyebrow {
+  background: rgba(56, 189, 248, 0.1);
+  border: 1px solid rgba(56, 189, 248, 0.18);
+  color: var(--accent);
+}
+
+.hero-title,
+.section-heading h2,
+.feature-card .card-title,
+.workflow-panel h3,
+.workflow-panel h4,
+.hero-board-card strong,
+.metric-card strong,
+.floating-badge strong {
+  color: var(--text-main);
+}
+
+.hero-description,
+.metric-card span,
+.feature-card .card-text,
+.workflow-panel p,
+.hero-board-card span,
+.hero-board-card small,
+.floating-badge span,
+.login-showcase > p,
+.login-feature-card p,
+.demo-credential-card small,
+.login-header p,
+.footer-meta small {
+  color: var(--text-soft);
+}
+
+.metric-card,
+.feature-card,
+.workflow-panel,
+.hero-board,
+.hero-board-card,
+.floating-badge {
+  border-color: var(--border-soft);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.88), rgba(30, 41, 59, 0.76));
+  box-shadow: var(--shadow-soft);
+}
+
+.workflow-panel-main {
+  background: linear-gradient(145deg, rgba(15, 23, 42, 0.98) 0%, rgba(30, 41, 59, 0.92) 100%);
+  color: var(--text-main);
+}
+
+.feature-icon {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.96), rgba(15, 23, 42, 0.98));
+  color: #020617;
+  box-shadow: 0 14px 30px rgba(56, 189, 248, 0.2);
+}
+
+.hero-board-card.sky,
+.hero-board-card.amber,
+.hero-board-card.mint,
+.hero-board-card.slate {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.16), rgba(15, 23, 42, 0.24));
+}
+
+.floating-badge {
+  border-color: rgba(56, 189, 248, 0.28);
+  background: rgba(15, 23, 42, 0.94);
+}
+
+.hero-section .btn-outline-primary,
+.hero-section .btn-outline-primary:hover,
+.hero-section .btn-outline-primary:focus {
+  background: rgba(15, 23, 42, 0.72);
+  border-color: rgba(56, 189, 248, 0.28);
+  color: var(--text-main);
+}
+
+.hero-section .btn-outline-primary:hover,
+.hero-section .btn-outline-primary:focus {
+  background: rgba(30, 41, 59, 0.92);
+  border-color: rgba(56, 189, 248, 0.42);
+}
+
+.workflow-label,
+.board-pill,
+.board-status {
+  background: rgba(56, 189, 248, 0.1);
+  border-color: rgba(56, 189, 248, 0.18);
+  color: var(--accent);
+}
+
+.login-container::before {
+  background: radial-gradient(circle, rgba(56, 189, 248, 0.24), transparent 68%);
+}
+
+.login-container::after {
+  background: radial-gradient(circle, rgba(30, 41, 59, 0.44), transparent 68%);
+}
+
+.login-showcase {
+  border-color: var(--border-soft);
+  background:
+    linear-gradient(155deg, rgba(2, 6, 23, 0.98) 0%, rgba(15, 23, 42, 0.94) 48%, rgba(30, 41, 59, 0.9) 100%);
+  color: var(--text-main);
+}
+
+.login-feature-card,
+.login-demo-panel,
+.demo-credential-card {
+  background: rgba(15, 23, 42, 0.68);
+  border-color: var(--border-soft);
+}
+
+.login-feature-icon {
+  background: rgba(56, 189, 248, 0.14);
+  color: var(--accent);
+}
+
+.login-box,
+.register-card,
+.forgot-password-card,
+.not-found-page .container {
+  border-color: var(--border-soft);
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(30, 41, 59, 0.92));
+  color: var(--text-main);
+}
+
+.login-footer {
+  border-top-color: var(--border-soft);
+}
+
+.forgot-link,
+.register-card .text-decoration-none,
+.forgot-password-card .text-decoration-none {
+  color: var(--accent);
+}
+
+.not-found-icon {
+  color: var(--accent);
+}
+
+.sidebar {
+  position: sticky;
+  top: 98px;
+  align-self: flex-start;
+  flex: 0 0 280px;
+  width: 280px;
+  margin: 1.5rem 0 1.5rem 1.5rem;
+  padding: 1rem;
+  border: 1px solid var(--border-soft);
+  border-radius: 28px;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.96), rgba(30, 41, 59, 0.92));
+  box-shadow: var(--shadow-soft);
+}
+
+.sidebar-header {
+  margin-bottom: 0.9rem;
+  padding: 0.4rem 0.75rem 1rem;
+  border-bottom: 1px solid var(--border-soft);
+}
+
+.sidebar-header h5 {
+  color: var(--text-main);
+}
+
+.sidebar .nav-link {
+  display: flex;
+  align-items: center;
+  gap: 0.9rem;
+  margin-bottom: 0.45rem;
+  padding: 0.85rem 1rem;
+  border: 1px solid transparent;
+  border-radius: 18px;
+  color: rgba(226, 232, 240, 0.76);
+  font-weight: 700;
+}
+
+.sidebar .nav-link:hover,
+.sidebar .nav-link.active {
+  background: rgba(56, 189, 248, 0.12);
+  border-color: rgba(56, 189, 248, 0.22);
+  color: var(--text-main);
+}
+
+.menu-icon {
+  color: var(--accent);
+}
+
+.logout-link {
+  margin-top: 0.9rem;
+}
+
+.admin-dashboard,
+.teacher-dashboard,
+.student-dashboard,
+.course-management,
+.reports-container,
+.student-management,
+.subject-management,
+.teacher-management,
+.timetable-management,
+.announcements,
+.mark-attendance,
+.student-list,
+.upload-assignments,
+.upload-marks,
+.view-attendance,
+.view-marks,
+.view-timetable,
+.student-profile,
+.fee-payment,
+.download-results {
+  color: var(--text-main);
+  background: transparent !important;
+}
+
+.admin-dashboard .main-content,
+.teacher-dashboard .main-content,
+.student-dashboard .main-content {
+  flex: 1;
+  margin: 1.5rem;
+  padding: 0 !important;
+}
+
+.profile-avatar {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 84px;
+  height: 84px;
+  border-radius: 24px;
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.96), rgba(125, 211, 252, 0.88));
+  color: #020617;
+  font-size: 1.4rem;
+  font-weight: 800;
+  box-shadow: 0 18px 34px rgba(56, 189, 248, 0.2);
+}
+
+.profile-card,
+.attendance-card,
+.marks-card,
+.fees-card,
+.stats-card,
+.course-card,
+.teacher-card,
+.summary-card,
+.stat-card,
+.action-card,
+.chart-container,
+.recent-activities,
+.table-container,
+.data-table-container,
+.filter-section,
+.report-filters,
+.filter-wrapper,
+.quick-actions,
+.performance-section,
+.page-header,
+.header-section,
+.teacher-header,
+.report-header,
+.modal-content,
+.empty-state,
+.report-loading,
+.report-error,
+.subject-item,
+.timetable-container,
+.controls-panel,
+.schedule-builder,
+.class-card {
+  border: 1px solid var(--border-soft) !important;
+  background: linear-gradient(180deg, rgba(15, 23, 42, 0.94), rgba(30, 41, 59, 0.82)) !important;
+  color: var(--text-main) !important;
+  box-shadow: var(--shadow-soft);
+}
+
+.page-header,
+.header-section,
+.teacher-header,
+.report-header,
+.chart-header,
+.activity-header,
+.table-header,
+.modal-header,
+.section-header {
+  border-bottom: 1px solid var(--border-soft) !important;
+  background: linear-gradient(135deg, rgba(15, 23, 42, 0.98), rgba(30, 41, 59, 0.94) 76%, rgba(56, 189, 248, 0.14)) !important;
+}
+
+.page-title,
+.report-title,
+.header-title h2,
+.header-content h1,
+.section-header h3,
+.chart-header h5,
+.activity-header h5,
+.table-header h5,
+.modal-header h3,
+.teacher-name,
+.student-name,
+.course-title,
+.action-title {
+  color: var(--text-main) !important;
+}
+
+.page-title i,
+.report-title i,
+.filter-group i,
+.search-box i,
+.info-item i,
+.subject-stats i,
+.action-icon,
+.stat-icon,
+.course-management .page-title i,
+.reports-container .report-title i {
+  color: var(--accent) !important;
+}
+
+.header-title p,
+.header-content p,
+.report-description,
+.course-description,
+.student-id,
+.teacher-id,
+.course-duration,
+.stat-label,
+.pagination-info,
+.empty-state p,
+.report-loading p,
+.report-error p,
+.detail-content .label,
+.modal-field label,
+.subject-info p,
+.info-row .label,
+.info-item,
+.table-search input::placeholder,
+.search-box input::placeholder,
+.form-control::placeholder,
+.form-select::placeholder,
+.profile-info p,
+.fee-details p,
+.status-text,
+.report-error i,
+.empty-state i,
+.class-detail-item,
+.detail-content,
+.date-separator,
+.report-loading .spinner + p,
+.teacher-department,
+.footer-meta,
+.login-helper {
+  color: var(--text-soft) !important;
+}
+
+.filter-select,
+.filter-control,
+.search-box input,
+.filter-group input,
+.filter-group select,
+.table-search input,
+.date-input input,
+.course-management .form-control,
+.course-management .form-select,
+.reports-container .form-control,
+.reports-container .form-select,
+.student-management .form-control,
+.student-management .form-select,
+.teacher-management .form-control,
+.teacher-management .form-select,
+.timetable-management .form-control,
+.timetable-management .form-select {
+  background: rgba(2, 6, 23, 0.66) !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--border-soft) !important;
+  box-shadow: none !important;
+}
+
+.filter-select:focus,
+.filter-control:focus,
+.search-box input:focus,
+.filter-group input:focus,
+.filter-group select:focus,
+.table-search input:focus,
+.date-input input:focus,
+.course-management .form-control:focus,
+.course-management .form-select:focus,
+.reports-container .form-control:focus,
+.reports-container .form-select:focus,
+.student-management .form-control:focus,
+.student-management .form-select:focus,
+.teacher-management .form-control:focus,
+.teacher-management .form-select:focus,
+.timetable-management .form-control:focus,
+.timetable-management .form-select:focus {
+  background: rgba(15, 23, 42, 0.96) !important;
+  color: var(--text-main) !important;
+  border-color: rgba(56, 189, 248, 0.42) !important;
+  box-shadow: 0 0 0 0.22rem rgba(56, 189, 248, 0.14) !important;
+}
+
+.btn-action,
+.quick-action-btn,
+.btn-filter,
+.btn-reset,
+.btn-report,
+.chart-type-btn,
+.period-btn,
+.week-tab,
+.pagination-btn,
+.btn-icon,
+.report-tab,
+.export-item,
+.btn-secondary,
+.btn-view,
+.btn-edit,
+.btn-pdf,
+.btn-excel,
+.btn-print {
+  background: rgba(15, 23, 42, 0.78) !important;
+  color: var(--text-main) !important;
+  border: 1px solid var(--border-soft) !important;
+  box-shadow: none !important;
+}
+
+.btn-action:hover,
+.quick-action-btn:hover,
+.btn-filter:hover,
+.btn-reset:hover,
+.btn-report:hover,
+.chart-type-btn:hover,
+.period-btn:hover,
+.week-tab:hover,
+.pagination-btn:hover:not(.disabled),
+.btn-icon:hover,
+.report-tab:hover,
+.export-item:hover,
+.btn-secondary:hover,
+.btn-view:hover,
+.btn-edit:hover,
+.btn-pdf:hover,
+.btn-excel:hover,
+.btn-print:hover {
+  background: rgba(56, 189, 248, 0.12) !important;
+  color: var(--text-main) !important;
+  border-color: rgba(56, 189, 248, 0.28) !important;
+}
+
+.btn-primary,
+.btn-apply,
+.btn-generate,
+.pagination-btn.active,
+.chart-type-btn.active,
+.period-btn.active,
+.week-tab.active,
+.report-tab.active {
+  background: linear-gradient(135deg, var(--brand), var(--accent-strong)) !important;
+  color: #020617 !important;
+  border-color: transparent !important;
+  box-shadow: 0 16px 32px rgba(56, 189, 248, 0.22) !important;
+}
+
+.btn-delete,
+.btn-icon.delete,
+.report-error button {
+  background: rgba(248, 113, 113, 0.16) !important;
+  color: #fecaca !important;
+  border: 1px solid rgba(248, 113, 113, 0.24) !important;
+}
+
+.btn-delete:hover,
+.btn-icon.delete:hover,
+.report-error button:hover {
+  background: rgba(248, 113, 113, 0.24) !important;
+}
+
+.students-table th,
+.students-table td,
+.subject-table th,
+.subject-table td,
+.data-table th,
+.data-table td,
+.activity-table th,
+.activity-table td,
+.course-management table th,
+.course-management table td,
+.teacher-management table th,
+.teacher-management table td,
+.timetable-management table th,
+.timetable-management table td {
+  border-color: var(--border-soft) !important;
+}
+
+.students-table th,
+.subject-table th,
+.data-table th,
+.activity-table th,
+.course-management table th,
+.teacher-management table th,
+.timetable-management table th {
+  background: rgba(30, 41, 59, 0.92) !important;
+  color: var(--text-main) !important;
+}
+
+.students-table td,
+.subject-table td,
+.data-table td,
+.activity-table td,
+.course-management table td,
+.teacher-management table td,
+.timetable-management table td {
+  background: rgba(15, 23, 42, 0.48) !important;
+  color: var(--text-main) !important;
+}
+
+.students-table tbody tr:hover td,
+.data-table tbody tr:hover td,
+.activity-table tbody tr:hover td,
+.course-management tbody tr:hover td,
+.teacher-management tbody tr:hover td,
+.timetable-management tbody tr:hover td {
+  background: rgba(56, 189, 248, 0.08) !important;
+}
+
+.course-code,
+.teacher-avatar,
+.student-avatar,
+.stat-icon,
+.action-icon {
+  background: linear-gradient(135deg, rgba(56, 189, 248, 0.96), rgba(125, 211, 252, 0.86)) !important;
+  color: #020617 !important;
+  box-shadow: 0 14px 30px rgba(56, 189, 248, 0.18);
+}
+
+.status-badge.active,
+.teacher-status,
+.badge-success {
+  background: rgba(34, 197, 94, 0.18) !important;
+  color: #bbf7d0 !important;
+  border: 1px solid rgba(34, 197, 94, 0.24) !important;
+}
+
+.status-badge.inactive,
+.teacher-status.inactive {
+  background: rgba(248, 113, 113, 0.16) !important;
+  color: #fecaca !important;
+  border: 1px solid rgba(248, 113, 113, 0.24) !important;
+}
+
+.badge-warning {
+  background: rgba(245, 158, 11, 0.18) !important;
+  color: #fde68a !important;
+  border: 1px solid rgba(245, 158, 11, 0.24) !important;
+}
+
+.modal-overlay,
+.student-modal {
+  background: rgba(2, 6, 23, 0.76) !important;
+}
+
+.modal-footer,
+.card-footer {
+  border-top: 1px solid var(--border-soft) !important;
+}
+
+.subject-table,
+.students-table,
+.data-table,
+.activity-table {
+  background: transparent !important;
+}
+
+@media (max-width: 991px) {
+  .admin-dashboard > .d-flex,
+  .teacher-dashboard > .d-flex,
+  .student-dashboard > .d-flex {
+    flex-direction: column;
+  }
+
+  .sidebar {
+    position: static;
+    top: auto;
+    width: auto;
+    flex-basis: auto;
+    margin: 1rem;
+  }
+
+  .admin-dashboard .main-content,
+  .teacher-dashboard .main-content,
+  .student-dashboard .main-content {
+    margin: 0 1rem 1rem;
+  }
+}
+
+/* Dark slate theme overrides */
+.header,
+.footer .container-lg,
+.sidebar,
+.login-showcase,
+.login-box,
+.register-card,
+.forgot-password-card,
+.not-found-page .container,
+.profile-card,
+.attendance-card,
+.marks-card,
+.fees-card,
+.stats-card,
+.course-card,
+.teacher-card,
+.summary-card,
+.stat-card,
+.action-card,
+.chart-container,
+.recent-activities,
+.table-container,
+.data-table-container,
+.filter-section,
+.report-filters,
+.filter-wrapper,
+.quick-actions,
+.performance-section,
+.page-header,
+.header-section,
+.teacher-header,
+.report-header,
+.modal-content,
+.empty-state,
+.report-loading,
+.report-error,
+.subject-item,
+.timetable-container,
+.controls-panel,
+.schedule-builder,
+.class-card {
+  background: linear-gradient(180deg, rgba(30, 41, 59, 0.96), rgba(30, 41, 59, 0.86)) !important;
+  border-color: rgba(148, 163, 184, 0.24) !important;
+  color: var(--text-main) !important;
+}

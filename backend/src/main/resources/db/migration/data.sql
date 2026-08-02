@@ -1,0 +1,3 @@
+-- Data initialization is handled by DemoAccountInitializer and CourseCatalogInitializer
+-- Spring Boot CommandLineRunner components seed demo accounts and course data on startup.
+-- This file is intentionally left empty to avoid conflicts with H2 in-memory database.
