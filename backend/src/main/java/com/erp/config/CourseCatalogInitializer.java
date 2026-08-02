@@ -1,8 +1,9 @@
 package com.erp.config;
 
-import com.erp.model.Course;
-import com.erp.repository.CourseRepository;
+import com.erp.course.Course;
+import com.erp.course.CourseRepository;
 import lombok.RequiredArgsConstructor;
+import com.erp.course.CourseCatalog;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.stereotype.Component;
 

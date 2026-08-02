@@ -1,9 +1,12 @@
 package com.erp.config;
 
-import com.erp.model.Student;
-import com.erp.model.User;
-import com.erp.repository.StudentRepository;
-import com.erp.repository.UserRepository;
+
+import com.erp.auth.Role;
+import com.erp.teacher.Teacher;
+import com.erp.student.Student;
+import com.erp.auth.User;
+import com.erp.student.StudentRepository;
+import com.erp.auth.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
