@@ -28,6 +28,16 @@ public class FeesServiceImpl implements FeesService {
     public List<Fees> getFeesByStudent(Long studentId) {
         return feesRepository.findByStudentId(studentId);
     }
+
+    @Override
+    public com.erp.fees.dto.StudentFeesSummaryResponse getFeesSummaryByStudent(Long studentId) {
+        List<Fees> fees = feesRepository.findByStudentId(studentId);
+        Double totalFees = fees.stream().mapToDouble(f -> f.getTotalAmount() != null ? f.getTotalAmount() : 0.0).sum();
+        Double paidAmount = fees.stream().mapToDouble(f -> f.getPaidAmount() != null ? f.getPaidAmount() : 0.0).sum();
+        Double dueAmount = fees.stream().mapToDouble(f -> f.getDueAmount() != null ? f.getDueAmount() : 0.0).sum();
+        
+        return new com.erp.fees.dto.StudentFeesSummaryResponse(totalFees, paidAmount, dueAmount, fees);
+    }
     
     @Override
     public List<Fees> getPendingFees() {

@@ -8,7 +8,9 @@ import java.util.Map;
 public interface AttendanceService {
     Attendance markAttendance(AttendanceRequest request);
     List<Attendance> markBulkAttendance(List<AttendanceRequest> requests);
+    Attendance markSelfAttendance(Long studentId, java.time.LocalDate date);
     List<Attendance> getAttendanceByStudent(Long studentId);
+    List<Attendance> getAttendanceByStudentAndDate(Long studentId, java.time.LocalDate date);
     List<Attendance> getAttendanceBySubject(Long subjectId);
     List<Attendance> getAttendanceByDate(java.time.LocalDate date);
     Attendance updateAttendance(Long id, AttendanceRequest request);

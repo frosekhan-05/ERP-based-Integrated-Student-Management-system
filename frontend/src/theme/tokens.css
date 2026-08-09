@@ -31,6 +31,16 @@
     --color-text-light: #94a3b8; /* slate-400 */
   }
 
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --color-background: #0f172a; /* slate-900 */
+      --color-surface: #1e293b; /* slate-800 */
+      --color-text-main: #f8fafc; /* slate-50 */
+      --color-text-muted: #94a3b8; /* slate-400 */
+      --color-text-light: #64748b; /* slate-500 */
+    }
+  }
+
   .dark {
     --color-background: #0f172a; /* slate-900 */
     --color-surface: #1e293b; /* slate-800 */

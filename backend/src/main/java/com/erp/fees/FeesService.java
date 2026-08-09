@@ -7,6 +7,7 @@ import java.util.Map;
 
 public interface FeesService {
     List<Fees> getFeesByStudent(Long studentId);
+    com.erp.fees.dto.StudentFeesSummaryResponse getFeesSummaryByStudent(Long studentId);
     List<Fees> getPendingFees();
     List<Fees> getOverdueFees();
     Fees collectFee(FeesRequest request);

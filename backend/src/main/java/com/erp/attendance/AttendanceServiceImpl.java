@@ -6,6 +6,8 @@ import com.erp.attendance.Attendance.AttendanceStatus;
 import com.erp.student.Student;
 import com.erp.course.Subject;
 import com.erp.teacher.Teacher;
+import java.time.LocalTime;
+import java.util.Optional;
 
 import com.erp.student.StudentRepository;
 import com.erp.course.SubjectRepository;
@@ -59,8 +61,45 @@ public class AttendanceServiceImpl implements AttendanceService {
     }
 
     @Override
+    public Attendance markSelfAttendance(Long studentId, LocalDate date) {
+        // Check if attendance already marked
+        List<Attendance> existing = getAttendanceByStudentAndDate(studentId, date);
+        if (!existing.isEmpty()) {
+            throw new IllegalStateException("Attendance already marked for today");
+        }
+
+        Student student = studentRepository.findById(studentId)
+            .orElseThrow(() -> new IllegalArgumentException("Student not found"));
+
+        Attendance attendance = new Attendance();
+        attendance.setStudent(student);
+        attendance.setDate(date);
+        
+        LocalTime timeNow = LocalTime.now();
+        LocalTime cutoffTime = LocalTime.of(9, 30);
+        
+        if (timeNow.isAfter(cutoffTime)) {
+            attendance.setStatus(AttendanceStatus.LATE);
+        } else {
+            attendance.setStatus(AttendanceStatus.PRESENT);
+        }
+        
+        attendance.setMarkedAt(LocalDateTime.now());
+        attendance.setRemarks("Self-marked");
+        
+        return attendanceRepository.save(attendance);
+    }
+
+    @Override
     public List<Attendance> getAttendanceByStudent(Long studentId) {
         return attendanceRepository.findByStudentId(studentId);
+    }
+
+    @Override
+    public List<Attendance> getAttendanceByStudentAndDate(Long studentId, LocalDate date) {
+        return attendanceRepository.findByStudentId(studentId).stream()
+            .filter(a -> a.getDate().equals(date))
+            .collect(Collectors.toList());
     }
 
     @Override

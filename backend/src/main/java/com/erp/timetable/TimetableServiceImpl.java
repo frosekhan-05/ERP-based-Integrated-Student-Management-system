@@ -8,6 +8,10 @@ import com.erp.teacher.Teacher;
 import com.erp.course.CourseRepository;
 import com.erp.course.SubjectRepository;
 import com.erp.teacher.TeacherRepository;
+import com.erp.student.StudentRepository;
+import com.erp.student.Student;
+import java.time.LocalDate;
+import java.util.stream.Collectors;
 
 
 import lombok.RequiredArgsConstructor;
@@ -23,10 +27,29 @@ public class TimetableServiceImpl implements TimetableService {
     private final CourseRepository courseRepository;
     private final SubjectRepository subjectRepository;
     private final TeacherRepository teacherRepository;
+    private final StudentRepository studentRepository;
 
     @Override
     public List<Timetable> getTimetableByCourseAndSemester(Long courseId, Integer semester) {
         return timetableRepository.findByCourseIdAndSemester(courseId, semester);
+    }
+
+    @Override
+    public List<Timetable> getTimetableByStudent(Long studentId) {
+        Student student = studentRepository.findById(studentId)
+            .orElseThrow(() -> new IllegalArgumentException("Student not found"));
+        if (student.getCourse() == null || student.getSemester() == null) {
+            return List.of();
+        }
+        return timetableRepository.findByCourseIdAndSemester(student.getCourse().getId(), student.getSemester());
+    }
+
+    @Override
+    public List<Timetable> getTimetableByStudentAndDate(Long studentId, LocalDate date) {
+        String dayOfWeek = date.getDayOfWeek().name();
+        return getTimetableByStudent(studentId).stream()
+            .filter(t -> t.getDayOfWeek() != null && t.getDayOfWeek().equalsIgnoreCase(dayOfWeek))
+            .collect(Collectors.toList());
     }
 
     @Override

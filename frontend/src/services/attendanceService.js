@@ -8,8 +8,9 @@ const attendanceService = {
     },
 
     // Get attendance by student
-    getAttendanceByStudent: async (studentId) => {
-        const response = await api.get(`/attendance/student/${studentId}`);
+    getAttendanceByStudent: async (studentId, date = null) => {
+        const url = date ? `/attendance/student/${studentId}?date=${date}` : `/attendance/student/${studentId}`;
+        const response = await api.get(url);
         return response.data;
     },
 
@@ -22,6 +23,12 @@ const attendanceService = {
     // Mark single attendance
     markAttendance: async (attendanceData) => {
         const response = await api.post('/attendance/mark', attendanceData);
+        return response.data;
+    },
+
+    // Mark self attendance
+    markSelfAttendance: async (date) => {
+        const response = await api.post('/attendance/student/mark', { date });
         return response.data;
     },
 

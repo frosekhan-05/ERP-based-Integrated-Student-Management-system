@@ -9,6 +9,12 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import com.erp.auth.UserRepository;
+import com.erp.auth.User;
+import com.erp.fees.dto.StudentFeesSummaryResponse;
 import java.util.List;
 import java.util.Map;
 
@@ -18,12 +24,25 @@ import java.util.Map;
 public class FeesController {
     
     private final FeesService feesService;
+    private final UserRepository userRepository;
+
+    private void verifyStudentAccess(Long studentId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_STUDENT"))) {
+            User user = userRepository.findByUsername(auth.getName())
+                .orElseThrow(() -> new AccessDeniedException("User not found"));
+            if (!user.getId().equals(studentId)) {
+                throw new AccessDeniedException("You can only access your own data");
+            }
+        }
+    }
     
     @GetMapping("/student/{studentId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'STUDENT')")
     public ResponseEntity<?> getFeesByStudent(@PathVariable Long studentId) {
-        List<Fees> fees = feesService.getFeesByStudent(studentId);
-        return ResponseEntity.ok(ApiResponse.success("Fees retrieved successfully", fees));
+        verifyStudentAccess(studentId);
+        StudentFeesSummaryResponse response = feesService.getFeesSummaryByStudent(studentId);
+        return ResponseEntity.ok(ApiResponse.success("Fees retrieved successfully", response));
     }
     
     @GetMapping("/pending")

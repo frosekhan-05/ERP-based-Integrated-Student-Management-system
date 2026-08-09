@@ -1,6 +1,5 @@
 package com.erp.attendance;
 
-
 import com.erp.student.Student;
 import com.erp.teacher.Teacher;
 import com.erp.course.Subject;
@@ -23,7 +22,7 @@ public class Attendance {
     private Student student;
     
     @ManyToOne
-    @JoinColumn(name = "subject_id", nullable = false)
+    @JoinColumn(name = "subject_id")
     private Subject subject;
     
     @ManyToOne

@@ -10,6 +10,11 @@ import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.access.AccessDeniedException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import com.erp.auth.UserRepository;
+import com.erp.auth.User;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
@@ -20,6 +25,22 @@ import java.util.Map;
 public class AttendanceController {
     
     private final AttendanceService attendanceService;
+    private final UserRepository userRepository;
+
+    private void verifyStudentAccess(Long studentId) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        System.out.println("DEBUG: verifyStudentAccess called with studentId=" + studentId);
+        System.out.println("DEBUG: auth.getAuthorities()=" + auth.getAuthorities());
+        if (auth.getAuthorities().stream().anyMatch(a -> a.getAuthority().equals("ROLE_STUDENT"))) {
+            User user = userRepository.findByUsername(auth.getName())
+                .orElseThrow(() -> new AccessDeniedException("User not found"));
+            System.out.println("DEBUG: Found user=" + user.getUsername() + ", user.getId()=" + user.getId());
+            if (!user.getId().equals(studentId)) {
+                System.out.println("DEBUG: Mismatch! user.getId()=" + user.getId() + " != studentId=" + studentId);
+                throw new AccessDeniedException("You can only access your own data");
+            }
+        }
+    }
     
     @GetMapping("/date/{date}")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
@@ -31,8 +52,16 @@ public class AttendanceController {
     
     @GetMapping("/student/{studentId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER', 'STUDENT')")
-    public ResponseEntity<?> getAttendanceByStudent(@PathVariable Long studentId) {
-        List<Attendance> attendance = attendanceService.getAttendanceByStudent(studentId);
+    public ResponseEntity<?> getAttendanceByStudent(
+            @PathVariable Long studentId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
+        verifyStudentAccess(studentId);
+        List<Attendance> attendance;
+        if (date != null) {
+            attendance = attendanceService.getAttendanceByStudentAndDate(studentId, date);
+        } else {
+            attendance = attendanceService.getAttendanceByStudent(studentId);
+        }
         return ResponseEntity.ok(ApiResponse.success("Attendance retrieved successfully", attendance));
     }
     
@@ -43,6 +72,23 @@ public class AttendanceController {
         return ResponseEntity.ok(ApiResponse.success("Attendance retrieved successfully", attendance));
     }
     
+    @PostMapping("/student/mark")
+    @PreAuthorize("hasRole('STUDENT')")
+    public ResponseEntity<?> markSelfAttendance(@RequestBody Map<String, String> request) {
+        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        User user = userRepository.findByUsername(auth.getName())
+            .orElseThrow(() -> new AccessDeniedException("User not found"));
+        
+        LocalDate date = request.containsKey("date") ? LocalDate.parse(request.get("date")) : LocalDate.now();
+        
+        try {
+            Attendance attendance = attendanceService.markSelfAttendance(user.getId(), date);
+            return ResponseEntity.ok(ApiResponse.success("Attendance marked successfully", attendance));
+        } catch (IllegalStateException e) {
+            return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
+        }
+    }
+
     @PostMapping("/mark")
     @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<?> markAttendance(@Valid @RequestBody AttendanceRequest request) {
