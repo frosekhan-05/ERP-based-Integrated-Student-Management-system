@@ -1,34 +1,75 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
-import { FileText, Trophy, TrendingUp, AlertCircle } from 'lucide-react';
+import { useState, useEffect, useContext } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
+import { FileText, Trophy, TrendingUp, AlertCircle, Search } from 'lucide-react';
 import { Card } from '../../components/ui/Card';
 import { AnimatedNumber } from '../../animation/AnimatedNumber';
 import { staggerContainer, fadeUp } from '../../animation/variants';
+import { AuthContext } from '../../context/AuthContext';
+import { Skeleton } from '../../components/ui/Skeleton';
+import marksService from '../../services/marksService';
+import { toast } from 'react-toastify';
 
 export const StudentMarks = () => {
+  const { user } = useContext(AuthContext);
   const [stats, setStats] = useState(null);
+  const [marksData, setMarksData] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Simulated API response
-    setTimeout(() => {
-      setStats({
-        cgpa: 3.84,
-        rank: 12,
-        totalCredits: 120,
-        completedCredits: 45
-      });
-    }, 400);
-  }, []);
+    const fetchMarksData = async () => {
+      if (!user) return;
+      try {
+        setIsLoading(true);
+        // Fetch marks list
+        const marksResponse = await marksService.getMarksByStudent(user.id);
+        const marks = marksResponse.data || [];
+        setMarksData(marks);
 
-  const marksData = [
-    { id: 1, subject: 'Advanced Mathematics', code: 'MATH-401', credits: 4, midTerm: 88, final: 92, assignment: 95, total: 92, grade: 'A' },
-    { id: 2, subject: 'Computer Science 101', code: 'CS-101', credits: 3, midTerm: 75, final: 82, assignment: 88, total: 81, grade: 'B' },
-    { id: 3, subject: 'Physics Practical', code: 'PHY-202P', credits: 2, midTerm: 90, final: 94, assignment: 90, total: 92, grade: 'A' },
-    { id: 4, subject: 'Database Systems', code: 'CS-305', credits: 4, midTerm: 65, final: 78, assignment: 85, total: 76, grade: 'C' },
-    { id: 5, subject: 'Software Engineering', code: 'CS-410', credits: 3, midTerm: 85, final: 88, assignment: 92, total: 88, grade: 'B+' },
-  ];
+        // Fetch report for stats
+        try {
+            const reportResponse = await marksService.getStudentReport(user.id);
+            if (reportResponse.data) {
+                setStats({
+                    cgpa: reportResponse.data.cgpa || 0,
+                    rank: reportResponse.data.rank || 0,
+                    totalCredits: reportResponse.data.totalCredits || 0,
+                    completedCredits: reportResponse.data.completedCredits || 0,
+                    standing: reportResponse.data.standing || 'Good'
+                });
+            }
+        } catch (reportError) {
+            console.error("Failed to fetch report, calculating basic stats", reportError);
+            // Fallback calculation if report API fails or isn't fully implemented
+            let totalGpa = 0;
+            let validMarksCount = 0;
+            marks.forEach(m => {
+                if (m.gpa) {
+                    totalGpa += m.gpa;
+                    validMarksCount++;
+                }
+            });
+            const cgpa = validMarksCount > 0 ? (totalGpa / validMarksCount) : 0;
+            setStats({
+                cgpa: Number(cgpa.toFixed(2)),
+                rank: '-',
+                totalCredits: marks.length * 3, // mock
+                completedCredits: marks.length * 3, // mock
+                standing: cgpa >= 3.0 ? 'Excellent' : 'Good'
+            });
+        }
+      } catch (error) {
+        console.error("Failed to fetch marks", error);
+        toast.error("Could not load your marks data");
+      } finally {
+        setIsLoading(false);
+      }
+    };
+
+    fetchMarksData();
+  }, [user]);
 
   const getGradeColor = (grade) => {
+    if (!grade) return 'bg-slate-100 text-slate-700 dark:bg-slate-900/40 dark:text-slate-400';
     if (grade.startsWith('A')) return 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-400';
     if (grade.startsWith('B')) return 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-400';
     if (grade.startsWith('C')) return 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-400';
@@ -49,12 +90,17 @@ export const StudentMarks = () => {
         </div>
       </motion.div>
 
+      {isLoading ? (
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+            {[1, 2, 3, 4].map(i => <Skeleton key={i} className="h-32 rounded-xl" />)}
+        </div>
+      ) : (
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
         {[
           { label: 'Current CGPA', value: stats?.cgpa || 0, isDecimal: true, icon: <Trophy className="h-5 w-5"/>, color: 'text-yellow-600 dark:text-yellow-400' },
           { label: 'Class Rank', value: stats?.rank || 0, prefix: '#', icon: <TrendingUp className="h-5 w-5"/>, color: 'text-indigo-600 dark:text-indigo-400' },
           { label: 'Credits Earned', value: stats?.completedCredits || 0, icon: <FileText className="h-5 w-5"/>, color: 'text-emerald-600 dark:text-emerald-400' },
-          { label: 'Academic Standing', stringValue: 'Excellent', icon: <AlertCircle className="h-5 w-5"/>, color: 'text-blue-600 dark:text-blue-400' },
+          { label: 'Academic Standing', stringValue: stats?.standing || 'Good', icon: <AlertCircle className="h-5 w-5"/>, color: 'text-blue-600 dark:text-blue-400' },
         ].map((stat, i) => (
           <motion.div key={i} variants={fadeUp}>
             <Card className="p-6 h-full flex flex-col justify-center">
@@ -73,27 +119,43 @@ export const StudentMarks = () => {
           </motion.div>
         ))}
       </div>
+      )}
 
       <motion.div variants={fadeUp}>
         <Card className="overflow-hidden">
           <div className="p-6 border-b border-slate-100 dark:border-slate-800">
-            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Semester Results (Fall 2023)</h3>
+            <h3 className="text-lg font-bold text-slate-900 dark:text-white">Semester Results</h3>
           </div>
           <div className="overflow-x-auto">
             <table className="w-full text-left text-sm text-slate-600 dark:text-slate-400">
               <thead className="text-xs uppercase bg-slate-50 dark:bg-slate-800/50 text-slate-500 dark:text-slate-400 border-b border-slate-200 dark:border-slate-700">
                 <tr>
                   <th className="px-6 py-4 font-semibold">Subject</th>
-                  <th className="px-6 py-4 font-semibold">Credits</th>
-                  <th className="px-6 py-4 font-semibold">Mid-Term</th>
-                  <th className="px-6 py-4 font-semibold">Assignment</th>
-                  <th className="px-6 py-4 font-semibold">Final</th>
+                  <th className="px-6 py-4 font-semibold">Exam</th>
+                  <th className="px-6 py-4 font-semibold">Marks</th>
                   <th className="px-6 py-4 font-semibold">Total (%)</th>
                   <th className="px-6 py-4 font-semibold text-center">Grade</th>
+                  <th className="px-6 py-4 font-semibold text-center">Result</th>
                 </tr>
               </thead>
               <tbody>
-                {marksData.map((mark, i) => (
+                {isLoading ? (
+                    <tr>
+                        <td colSpan="6" className="p-4">
+                            <Skeleton className="h-10 w-full mb-2" />
+                            <Skeleton className="h-10 w-full mb-2" />
+                        </td>
+                    </tr>
+                ) : marksData.length === 0 ? (
+                    <tr>
+                        <td colSpan="6" className="px-6 py-12 text-center text-slate-500">
+                            <div className="flex flex-col items-center">
+                                <Search className="h-10 w-10 opacity-20 mb-3" />
+                                <p>No marks have been uploaded yet.</p>
+                            </div>
+                        </td>
+                    </tr>
+                ) : marksData.map((mark, i) => (
                   <motion.tr 
                     initial={{ opacity: 0, y: 10 }}
                     animate={{ opacity: 1, y: 0 }}
@@ -102,18 +164,22 @@ export const StudentMarks = () => {
                     className="border-b border-slate-100 dark:border-slate-800 last:border-0 hover:bg-slate-50/50 dark:hover:bg-slate-800/30 transition-colors"
                   >
                     <td className="px-6 py-4">
-                      <p className="font-bold text-slate-900 dark:text-white">{mark.subject}</p>
-                      <p className="text-xs opacity-70 mt-0.5">{mark.code}</p>
+                      <p className="font-bold text-slate-900 dark:text-white">{mark.subjectName}</p>
                     </td>
-                    <td className="px-6 py-4">{mark.credits}</td>
-                    <td className="px-6 py-4">{mark.midTerm}</td>
-                    <td className="px-6 py-4">{mark.assignment}</td>
-                    <td className="px-6 py-4">{mark.final}</td>
-                    <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">{mark.total}%</td>
+                    <td className="px-6 py-4">{mark.examName || 'Final Exam'}</td>
+                    <td className="px-6 py-4">{mark.marksObtained} / {mark.maxMarks}</td>
+                    <td className="px-6 py-4 font-bold text-slate-900 dark:text-white">
+                        {mark.percentage ? mark.percentage.toFixed(1) : ((mark.marksObtained / mark.maxMarks) * 100).toFixed(1)}%
+                    </td>
                     <td className="px-6 py-4 text-center">
                       <span className={`inline-flex items-center justify-center px-2.5 py-1 rounded-full text-xs font-bold ${getGradeColor(mark.grade)}`}>
-                        {mark.grade}
+                        {mark.grade || '-'}
                       </span>
+                    </td>
+                    <td className="px-6 py-4 text-center">
+                        <span className={`text-xs font-bold ${mark.result === 'PASS' ? 'text-emerald-500' : 'text-rose-500'}`}>
+                            {mark.result || '-'}
+                        </span>
                     </td>
                   </motion.tr>
                 ))}

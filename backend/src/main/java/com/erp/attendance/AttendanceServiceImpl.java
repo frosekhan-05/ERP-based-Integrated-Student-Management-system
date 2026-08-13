@@ -71,8 +71,22 @@ public class AttendanceServiceImpl implements AttendanceService {
         Student student = studentRepository.findById(studentId)
             .orElseThrow(() -> new IllegalArgumentException("Student not found"));
 
+        // Find subject - try to get from student's course and semester
+        Subject subject = null;
+        if (student.getCourse() != null && student.getSemester() != null) {
+            // Try to find a subject for this student's course and semester
+            List<Subject> subjects = subjectRepository.findByCourseIdAndSemester(
+                student.getCourse().getId(), 
+                student.getSemester()
+            );
+            if (!subjects.isEmpty()) {
+                subject = subjects.get(0); // Take first subject
+            }
+        }
+
         Attendance attendance = new Attendance();
         attendance.setStudent(student);
+        attendance.setSubject(subject); // Can be null if no subject found
         attendance.setDate(date);
         
         LocalTime timeNow = LocalTime.now();

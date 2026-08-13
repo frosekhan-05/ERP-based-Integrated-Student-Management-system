@@ -1,12 +1,12 @@
 package com.erp.attendance;
 
-import com.erp.student.Student;
-import com.erp.teacher.Teacher;
-import com.erp.course.Subject;
 import jakarta.persistence.*;
 import lombok.Data;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import com.erp.student.Student;
+import com.erp.course.Subject;
+import com.erp.teacher.Teacher;
 
 @Entity
 @Table(name = "attendance")
@@ -22,7 +22,7 @@ public class Attendance {
     private Student student;
     
     @ManyToOne
-    @JoinColumn(name = "subject_id")
+    @JoinColumn(name = "subject_id", nullable = true) // FIXED: Made nullable
     private Subject subject;
     
     @ManyToOne

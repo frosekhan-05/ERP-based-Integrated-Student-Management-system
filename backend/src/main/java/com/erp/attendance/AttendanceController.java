@@ -1,8 +1,8 @@
 package com.erp.attendance;
 
 import com.erp.attendance.dto.AttendanceRequest;
+import com.erp.attendance.dto.AttendanceResponse;
 import com.erp.common.dto.ApiResponse;
-
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,6 +18,7 @@ import com.erp.auth.User;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/attendance")
@@ -26,6 +27,28 @@ public class AttendanceController {
     
     private final AttendanceService attendanceService;
     private final UserRepository userRepository;
+
+    private AttendanceResponse mapToResponse(Attendance attendance) {
+        AttendanceResponse response = new AttendanceResponse();
+        response.setId(attendance.getId());
+        
+        if (attendance.getStudent() != null) {
+            response.setStudentId(attendance.getStudent().getId());
+            response.setStudentName(attendance.getStudent().getFirstName() + " " + attendance.getStudent().getLastName());
+        }
+        
+        if (attendance.getSubject() != null) {
+            response.setSubjectId(attendance.getSubject().getId());
+            response.setSubjectName(attendance.getSubject().getSubjectName());
+        }
+        
+        response.setDate(attendance.getDate());
+        response.setStatus(attendance.getStatus() != null ? attendance.getStatus().name() : null);
+        response.setMarkedAt(attendance.getMarkedAt());
+        response.setRemarks(attendance.getRemarks());
+        
+        return response;
+    }
 
     private void verifyStudentAccess(Long studentId) {
         Authentication auth = SecurityContextHolder.getContext().getAuthentication();
@@ -46,7 +69,8 @@ public class AttendanceController {
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public ResponseEntity<?> getAttendanceByDate(
             @PathVariable @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
-        List<Attendance> attendance = attendanceService.getAttendanceByDate(date);
+        List<AttendanceResponse> attendance = attendanceService.getAttendanceByDate(date)
+                .stream().map(this::mapToResponse).collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success("Attendance retrieved successfully", attendance));
     }
     
@@ -56,11 +80,13 @@ public class AttendanceController {
             @PathVariable Long studentId,
             @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate date) {
         verifyStudentAccess(studentId);
-        List<Attendance> attendance;
+        List<AttendanceResponse> attendance;
         if (date != null) {
-            attendance = attendanceService.getAttendanceByStudentAndDate(studentId, date);
+            attendance = attendanceService.getAttendanceByStudentAndDate(studentId, date)
+                    .stream().map(this::mapToResponse).collect(Collectors.toList());
         } else {
-            attendance = attendanceService.getAttendanceByStudent(studentId);
+            attendance = attendanceService.getAttendanceByStudent(studentId)
+                    .stream().map(this::mapToResponse).collect(Collectors.toList());
         }
         return ResponseEntity.ok(ApiResponse.success("Attendance retrieved successfully", attendance));
     }
@@ -68,24 +94,35 @@ public class AttendanceController {
     @GetMapping("/subject/{subjectId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public ResponseEntity<?> getAttendanceBySubject(@PathVariable Long subjectId) {
-        List<Attendance> attendance = attendanceService.getAttendanceBySubject(subjectId);
+        List<AttendanceResponse> attendance = attendanceService.getAttendanceBySubject(subjectId)
+                .stream().map(this::mapToResponse).collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success("Attendance retrieved successfully", attendance));
     }
     
     @PostMapping("/student/mark")
     @PreAuthorize("hasRole('STUDENT')")
     public ResponseEntity<?> markSelfAttendance(@RequestBody Map<String, String> request) {
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
-        User user = userRepository.findByUsername(auth.getName())
-            .orElseThrow(() -> new AccessDeniedException("User not found"));
-        
-        LocalDate date = request.containsKey("date") ? LocalDate.parse(request.get("date")) : LocalDate.now();
-        
         try {
+            Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+            User user = userRepository.findByUsername(auth.getName())
+                .orElseThrow(() -> new AccessDeniedException("User not found"));
+            
+            LocalDate date = request.containsKey("date") ? 
+                LocalDate.parse(request.get("date")) : LocalDate.now();
+            
             Attendance attendance = attendanceService.markSelfAttendance(user.getId(), date);
-            return ResponseEntity.ok(ApiResponse.success("Attendance marked successfully", attendance));
+            return ResponseEntity.ok(ApiResponse.success("Attendance marked successfully", mapToResponse(attendance)));
+            
         } catch (IllegalStateException e) {
-            return ResponseEntity.badRequest().body(ApiResponse.error(e.getMessage()));
+            return ResponseEntity.status(org.springframework.http.HttpStatus.CONFLICT)
+                .body(ApiResponse.error(e.getMessage()));
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(org.springframework.http.HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error(e.getMessage()));
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(org.springframework.http.HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(ApiResponse.error("Failed to mark attendance: " + e.getMessage()));
         }
     }
 
@@ -93,13 +130,14 @@ public class AttendanceController {
     @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<?> markAttendance(@Valid @RequestBody AttendanceRequest request) {
         Attendance attendance = attendanceService.markAttendance(request);
-        return ResponseEntity.ok(ApiResponse.success("Attendance marked successfully", attendance));
+        return ResponseEntity.ok(ApiResponse.success("Attendance marked successfully", mapToResponse(attendance)));
     }
     
     @PostMapping("/bulk")
     @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<?> markBulkAttendance(@Valid @RequestBody List<AttendanceRequest> requests) {
-        List<Attendance> attendances = attendanceService.markBulkAttendance(requests);
+        List<AttendanceResponse> attendances = attendanceService.markBulkAttendance(requests)
+                .stream().map(this::mapToResponse).collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success("Bulk attendance marked successfully", attendances));
     }
     
@@ -107,7 +145,7 @@ public class AttendanceController {
     @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<?> updateAttendance(@PathVariable Long id, @Valid @RequestBody AttendanceRequest request) {
         Attendance attendance = attendanceService.updateAttendance(id, request);
-        return ResponseEntity.ok(ApiResponse.success("Attendance updated successfully", attendance));
+        return ResponseEntity.ok(ApiResponse.success("Attendance updated successfully", mapToResponse(attendance)));
     }
     
     @GetMapping("/report/{studentId}")
@@ -133,7 +171,8 @@ public class AttendanceController {
     @GetMapping("/today")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public ResponseEntity<?> getTodayAttendance() {
-        List<Attendance> attendance = attendanceService.getAttendanceByDate(LocalDate.now());
+        List<AttendanceResponse> attendance = attendanceService.getAttendanceByDate(LocalDate.now())
+                .stream().map(this::mapToResponse).collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success("Today's attendance retrieved", attendance));
     }
 }

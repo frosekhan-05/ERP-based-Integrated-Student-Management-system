@@ -9,80 +9,84 @@ import { Login } from './features/auth/Login';
 import { Register } from './features/auth/Register';
 import { AdminDashboard } from './features/dashboard/AdminDashboard';
 import { AdminStudents } from './features/admin/AdminStudents';
+import { AdminTeachers } from './features/admin/AdminTeachers';
+import { AdminCourses } from './features/courses/AdminCourses';
+import { AdminSettings } from './features/admin/AdminSettings';
 import { StudentDashboard } from './features/dashboard/StudentDashboard';
 import { StudentAttendance } from './features/attendance/StudentAttendance';
 import { StudentTimetable } from './features/timetable/StudentTimetable';
 import { StudentMarks } from './features/marks/StudentMarks';
 import { StudentFees } from './features/fees/StudentFees';
-// Temporary placeholder components for routes until we build the features
+import { TeacherDashboard } from './features/dashboard/TeacherDashboard';
+import { TeacherAttendance } from './features/attendance/TeacherAttendance';
+import { TeacherTimetable } from './features/timetable/TeacherTimetable';
+import { TeacherMarks } from './features/marks/TeacherMarks';
+import NotFoundPage from './pages/NotFoundPage';
+
 const Placeholder = ({ title }) => (
-  <div className="p-6">
-    <h1 className="text-2xl font-bold mb-6">{title}</h1>
-    <EmptyState 
-      title={`No data for ${title}`} 
-      action={<Button>Create New</Button>} 
-    />
-  </div>
+    <div className="p-6">
+        <h1 className="text-2xl font-bold mb-6">{title}</h1>
+        <EmptyState 
+            title={`No data for ${title}`} 
+            action={<Button>Create New</Button>} 
+        />
+    </div>
 );
 
 export const router = createBrowserRouter([
-  {
-    path: '/',
-    element: <Navigate to="/login" replace />,
-  },
-  {
-    path: '/login',
-    element: <AuthLayout />,
-    children: [
-      { index: true, element: <Login /> },
-    ],
-  },
-  {
-    path: '/register',
-    element: <AuthLayout />,
-    children: [
-      { index: true, element: <Register /> },
-    ],
-  },
-  {
-    path: '/admin',
-    element: <AdminLayout />,
-    children: [
-      { path: 'dashboard', element: <AdminDashboard /> },
-      { path: 'students', element: <AdminStudents /> },
-      { path: 'teachers', element: <Placeholder title="Manage Teachers" /> },
-      { path: 'courses', element: <Placeholder title="Manage Courses" /> },
-      { path: 'settings', element: <Placeholder title="Settings" /> },
-    ],
-  },
-  {
-    path: '/teacher',
-    element: <TeacherLayout />,
-    children: [
-      { path: 'dashboard', element: <Placeholder title="Teacher Dashboard" /> },
-      { path: 'attendance', element: <Placeholder title="Mark Attendance" /> },
-      { path: 'timetable', element: <Placeholder title="Timetable" /> },
-      { path: 'marks', element: <Placeholder title="Upload Marks" /> },
-    ],
-  },
-  {
-    path: '/student',
-    element: <StudentLayout />,
-    children: [
-      { path: 'dashboard', element: <StudentDashboard /> },
-      { path: 'attendance', element: <StudentAttendance /> },
-      { path: 'timetable', element: <StudentTimetable /> },
-      { path: 'marks', element: <StudentMarks /> },
-      { path: 'fees', element: <StudentFees /> },
-    ],
-  },
-  {
-    path: '*',
-    element: (
-      <div className="flex h-screen items-center justify-center">
-        {console.log("404 ROUTE HIT. Current pathname:", window.location.pathname)}
-        <EmptyState title="404 - Not Found" description={`The page you are looking for does not exist. (Path: ${window.location.pathname})`} action={<Button onClick={() => window.location.href = '/'}>Go Home</Button>} />
-      </div>
-    ),
-  }
+    {
+        path: '/',
+        element: <Navigate to="/login" replace />,
+    },
+    {
+        path: '/login',
+        element: <AuthLayout />,
+        children: [
+            { index: true, element: <Login /> },
+        ],
+    },
+    {
+        path: '/register',
+        element: <AuthLayout />,
+        children: [
+            { index: true, element: <Register /> },
+        ],
+    },
+    {
+        path: '/admin',
+        element: <AdminLayout />,
+        children: [
+            { path: 'dashboard', element: <AdminDashboard /> },
+            { path: 'students', element: <AdminStudents /> },
+            { path: 'teachers', element: <AdminTeachers /> },
+            { path: 'courses', element: <AdminCourses /> },
+            { path: 'settings', element: <AdminSettings /> },
+        ],
+    },
+    {
+        path: '/teacher',
+        element: <TeacherLayout />,
+        children: [
+            { path: 'dashboard', element: <TeacherDashboard /> },
+            { path: 'attendance', element: <TeacherAttendance /> },
+            { path: 'timetable', element: <TeacherTimetable /> },
+            { path: 'marks', element: <TeacherMarks /> },
+        ],
+    },
+    {
+        path: '/student',
+        element: <StudentLayout />,
+        children: [
+            { path: 'dashboard', element: <StudentDashboard /> },
+            { path: 'attendance', element: <StudentAttendance /> }, // This route exists
+            { path: 'timetable', element: <StudentTimetable /> },
+            { path: 'marks', element: <StudentMarks /> },
+            { path: 'fees', element: <StudentFees /> },
+        ],
+    },
+    // IMPORTANT: 404 route MUST be last
+    {
+        path: '*',
+        element: <NotFoundPage />,
+    }
 ]);

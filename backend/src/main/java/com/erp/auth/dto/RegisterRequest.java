@@ -29,4 +29,6 @@ public class RegisterRequest {
 
     @NotBlank
     private String confirmPassword;
+    
+    private String role;
 }

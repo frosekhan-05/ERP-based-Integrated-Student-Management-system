@@ -26,7 +26,7 @@ const attendanceService = {
         return response.data;
     },
 
-    // Mark self attendance
+    // Mark self attendance (FIXED: sends correct payload)
     markSelfAttendance: async (date) => {
         const response = await api.post('/attendance/student/mark', { date });
         return response.data;

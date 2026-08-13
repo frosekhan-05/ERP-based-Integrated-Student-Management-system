@@ -3,8 +3,10 @@ package com.erp.auth;
 import com.erp.auth.dto.RegisterRequest;
 
 import com.erp.student.Student;
-
 import com.erp.student.StudentRepository;
+
+import com.erp.teacher.Teacher;
+import com.erp.teacher.TeacherRepository;
 
 import com.erp.auth.dto.LoginRequest;
 import com.erp.auth.dto.LoginResponse;
@@ -27,6 +29,7 @@ public class AuthServiceImpl implements AuthService {
     
     private final UserRepository userRepository;
     private final StudentRepository studentRepository;
+    private final TeacherRepository teacherRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtUtils jwtUtils;
     private final PasswordEncoder passwordEncoder;
@@ -98,6 +101,28 @@ public class AuthServiceImpl implements AuthService {
         student.setEnrollmentDate(LocalDate.now());
 
         return studentRepository.save(student);
+    }
+
+    @Override
+    public Teacher registerTeacher(RegisterRequest request) {
+        if (!request.getPassword().equals(request.getConfirmPassword())) {
+            throw new IllegalArgumentException("Passwords do not match");
+        }
+
+        validateUniqueCredentials(request.getUsername(), request.getEmail());
+
+        Teacher teacher = new Teacher();
+        teacher.setFirstName(request.getFirstName().trim());
+        teacher.setLastName(request.getLastName().trim());
+        teacher.setEmail(request.getEmail().trim().toLowerCase());
+        teacher.setPhoneNumber(request.getPhoneNumber());
+        teacher.setUsername(request.getUsername().trim());
+        teacher.setPassword(passwordEncoder.encode(request.getPassword()));
+        teacher.setRole(User.Role.TEACHER);
+        teacher.setActive(true);
+        teacher.setJoinDate(LocalDate.now());
+
+        return teacherRepository.save(teacher);
     }
     
     @Override

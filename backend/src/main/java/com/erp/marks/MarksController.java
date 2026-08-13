@@ -1,11 +1,10 @@
 package com.erp.marks;
 
-
 import com.erp.student.Student;
 import com.erp.course.Subject;
 import com.erp.marks.dto.MarksRequest;
+import com.erp.marks.dto.MarksResponse;
 import com.erp.common.dto.ApiResponse;
-
 
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -14,6 +13,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("/api/marks")
@@ -22,24 +22,57 @@ public class MarksController {
     
     private final MarksService marksService;
     
+    private MarksResponse mapToResponse(Marks marks) {
+        MarksResponse response = new MarksResponse();
+        response.setId(marks.getId());
+        
+        if (marks.getStudent() != null) {
+            response.setStudentId(marks.getStudent().getId());
+            response.setStudentName(marks.getStudent().getFirstName() + " " + marks.getStudent().getLastName());
+        }
+        
+        if (marks.getSubject() != null) {
+            response.setSubjectId(marks.getSubject().getId());
+            response.setSubjectName(marks.getSubject().getSubjectName());
+        }
+        
+        if (marks.getExam() != null) {
+            response.setExamName(marks.getExam().getName());
+        }
+        
+        response.setMarksObtained(marks.getMarksObtained());
+        response.setMaxMarks(marks.getMaxMarks());
+        response.setPercentage(marks.getPercentage());
+        response.setGrade(marks.getGrade());
+        response.setGpa(marks.getGpa());
+        response.setResult(marks.getResult() != null ? marks.getResult().name() : null);
+        response.setUploadedAt(marks.getUploadedAt());
+        response.setRemarks(marks.getRemarks());
+        
+        return response;
+    }
+
     @GetMapping("/student/{studentId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER', 'STUDENT')")
     public ResponseEntity<?> getMarksByStudent(@PathVariable Long studentId) {
-        List<Marks> marks = marksService.getMarksByStudent(studentId);
+        List<MarksResponse> marks = marksService.getMarksByStudent(studentId)
+                .stream().map(this::mapToResponse).collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success("Marks retrieved successfully", marks));
     }
     
     @GetMapping("/subject/{subjectId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public ResponseEntity<?> getMarksBySubject(@PathVariable Long subjectId) {
-        List<Marks> marks = marksService.getMarksBySubject(subjectId);
+        List<MarksResponse> marks = marksService.getMarksBySubject(subjectId)
+                .stream().map(this::mapToResponse).collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success("Marks retrieved successfully", marks));
     }
     
     @GetMapping("/exam/{examId}")
     @PreAuthorize("hasAnyRole('ADMIN', 'TEACHER')")
     public ResponseEntity<?> getMarksByExam(@PathVariable Long examId) {
-        List<Marks> marks = marksService.getMarksByExam(examId);
+        List<MarksResponse> marks = marksService.getMarksByExam(examId)
+                .stream().map(this::mapToResponse).collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success("Marks retrieved successfully", marks));
     }
     
@@ -47,13 +80,14 @@ public class MarksController {
     @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<?> uploadMarks(@Valid @RequestBody MarksRequest request) {
         Marks marks = marksService.uploadMarks(request);
-        return ResponseEntity.ok(ApiResponse.success("Marks uploaded successfully", marks));
+        return ResponseEntity.ok(ApiResponse.success("Marks uploaded successfully", mapToResponse(marks)));
     }
     
     @PostMapping("/bulk")
     @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<?> uploadBulkMarks(@Valid @RequestBody List<MarksRequest> requests) {
-        List<Marks> marksList = marksService.uploadBulkMarks(requests);
+        List<MarksResponse> marksList = marksService.uploadBulkMarks(requests)
+                .stream().map(this::mapToResponse).collect(Collectors.toList());
         return ResponseEntity.ok(ApiResponse.success("Bulk marks uploaded successfully", marksList));
     }
     
@@ -61,7 +95,7 @@ public class MarksController {
     @PreAuthorize("hasRole('TEACHER')")
     public ResponseEntity<?> updateMarks(@PathVariable Long id, @Valid @RequestBody MarksRequest request) {
         Marks marks = marksService.updateMarks(id, request);
-        return ResponseEntity.ok(ApiResponse.success("Marks updated successfully", marks));
+        return ResponseEntity.ok(ApiResponse.success("Marks updated successfully", mapToResponse(marks)));
     }
     
     @GetMapping("/report/student/{studentId}")
